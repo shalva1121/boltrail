@@ -1,0 +1,105 @@
+<section class="train-detail-page">
+  <button class="back-link" type="button" (click)="goBack()">‹ Back to trains</button>
+
+  @if (loading()) {
+    <div class="state-box">
+      <div class="spinner"></div>
+      <p>Loading train details…</p>
+    </div>
+  } @else {
+    @if (error()) {
+      <div class="state-box">
+        <span class="state-icon">⚠️</span>
+        <h3>{{ error() }}</h3>
+      </div>
+    } @else {
+      <div class="train-detail-hero">
+        <div class="hero-image" [class.no-image]="!train()?.image">
+          @if (train()?.image) {
+            <img [src]="train()?.image" [alt]="formatTrainNumber(train())" loading="lazy" />
+          } @else {
+            <span class="placeholder-icon">🚆</span>
+          }
+        </div>
+
+        <div class="hero-copy">
+          <span class="eyebrow">TRAIN {{ train()?.id ?? train()?.trainId }}</span>
+          <h1>{{ train()?.name ?? train()?.title ?? train()?.trainName }}</h1>
+          <div class="train-meta">
+            <div>
+              <span>Coaches</span>
+              <strong>{{ train()?.coaches ?? train()?.coachesCount ?? '—' }}</strong>
+            </div>
+            <div>
+              <span>Total Seats</span>
+              <strong>{{ train()?.seats ?? train()?.totalSeats ?? '—' }}</strong>
+            </div>
+            <div>
+              <span>Route</span>
+              <strong>{{ getRouteText(train()) || 'Unknown' }}</strong>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="train-detail-tabs">
+        <button class="tab-button" [class.active]="activeTab() === 'schedules'" type="button" (click)="setTab('schedules')">Schedules</button>
+        <button class="tab-button" [class.active]="activeTab() === 'coaches'" type="button" (click)="setTab('coaches')">Coaches</button>
+      </div>
+
+      <div class="train-detail-content">
+        @if (activeTab() === 'schedules') {
+          @if (schedules().length === 0) {
+            <div class="state-box">
+              <span class="state-icon">📅</span>
+              <h3>No schedules available</h3>
+            </div>
+          } @else {
+            <div class="schedule-list">
+              @for (item of schedules(); track item.id ?? item.departureTime) {
+                    <article class="schedule-card">
+                      <div>
+                        <h2>{{ item.origin ?? 'Unknown' }} → {{ item.destination ?? 'Unknown' }}</h2>
+                        <p>{{ item.departureTime ?? 'No departure time' }}</p>
+                      </div>
+
+                      <div class="schedule-right">
+                        <span class="schedule-price">{{ item.price ?? item.fare ?? '' }}</span>
+                        <button class="schedule-book" type="button" (click)="bookSchedule(item)">Book</button>
+                      </div>
+                    </article>
+                  }
+            </div>
+          }
+        } @else {
+          @if (coaches().length === 0) {
+            <div class="state-box">
+              <span class="state-icon">🧩</span>
+              <h3>No coaches available</h3>
+            </div>
+          } @else {
+            <div class="coach-list">
+              @for (item of coaches(); track item.id ?? item.number ?? item.coachNumber) {
+                  <article class="coach-card">
+                    <div class="coach-left">
+                      <h2 class="coach-title">{{ item.name ?? (item.number ? ('Coach ' + item.number) : (item.coachNumber ? ('Coach ' + item.coachNumber) : 'Coach')) }}</h2>
+                      @if (item.type ?? item.category ?? item.class) {
+                        <span class="coach-badge">{{ item.type ?? item.category ?? item.class }}</span>
+                      } @else {
+                        <span class="coach-badge small">No class</span>
+                      }
+                    </div>
+
+                    <div class="coach-right">
+                      <span class="coach-seats">{{ getCoachSeats(item) }} seats</span>
+                      <span class="coach-price">{{ formatCoachPrice(item) }}</span>
+                    </div>
+                  </article>
+                }
+            </div>
+          }
+        }
+      </div>
+    }
+  }
+</section>

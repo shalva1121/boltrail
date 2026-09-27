@@ -1,0 +1,95 @@
+<section class="booking-detail-page">
+  <button class="back-link" type="button" (click)="goBack()">‹ Back to bookings</button>
+
+  @if (loading()) {
+    <div class="state-box">
+      <div class="spinner"></div>
+      <p>Loading booking…</p>
+    </div>
+  } @else if (error()) {
+    <div class="state-box">
+      <span class="state-icon">⚠️</span>
+      <h3>{{ error() }}</h3>
+    </div>
+  } @else {
+    <div class="hero-image">
+      <img src="https://images.unsplash.com/photo-1474487548417-781cb71495f3?auto=format&fit=crop&w=1400&q=80" alt="Train" loading="lazy" />
+    </div>
+
+    <div class="detail-header">
+      <p class="detail-route">
+        {{ origin() }}
+        <span>→</span>
+        {{ destination() }}
+      </p>
+      <p class="detail-price">${{ price() }}</p>
+    </div>
+
+    <div class="detail-card">
+      <div class="detail-row">
+        <span>Train</span>
+        <strong>{{ trainName() }}</strong>
+      </div>
+      <div class="detail-row">
+        <span>Departure Time</span>
+        <strong>{{ departureTime() }}</strong>
+      </div>
+      <div class="detail-row">
+        <span>Coach</span>
+        <strong>{{ coachLabel() }}</strong>
+      </div>
+      <div class="detail-row">
+        <span>Ticket Price</span>
+        <strong>${{ price() }}</strong>
+      </div>
+      <div class="detail-row">
+        <span>Seat</span>
+        <strong>{{ seat() }}</strong>
+      </div>
+      <div class="detail-row">
+        <span>Travel Date</span>
+        <strong>{{ travelDate() }}</strong>
+      </div>
+      <div class="detail-row">
+        <span>Booked On</span>
+        <strong>{{ bookedOn() }}</strong>
+      </div>
+    </div>
+
+    @if (deleteError()) {
+      <p class="error-msg">{{ deleteError() }}</p>
+    }
+
+    <div class="detail-actions">
+      <button class="change-date-btn" type="button" (click)="openChangeDate()">Change Date</button>
+      <button class="delete-booking-btn" type="button" (click)="deleteBooking()" [disabled]="deleting()">
+        @if (deleting()) { Deleting… } @else { Delete Booking }
+      </button>
+    </div>
+  }
+
+  @if (showChangeDate()) {
+    <div class="dialog-backdrop">
+      <div class="dialog">
+        <p class="dialog-title">Change Travel Date</p>
+        <p class="dialog-body">Choose a new travel date for this booking.</p>
+
+        <div class="dialog-field">
+          <label>New Travel Date</label>
+          <input type="date" [(ngModel)]="newDate" name="newTravelDate" />
+        </div>
+
+        @if (changeDateError()) {
+          <p class="error-msg">{{ changeDateError() }}</p>
+        }
+
+        <div class="dialog-actions">
+          <button class="cancel-btn" type="button" (click)="cancelChangeDate()">Cancel</button>
+          <button class="save-btn" type="button" (click)="saveNewDate()" [disabled]="savingDate()">
+            @if (savingDate()) { Saving… } @else { Save Date }
+          </button>
+        </div>
+      </div>
+    </div>
+  }
+</section>

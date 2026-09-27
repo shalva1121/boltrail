@@ -1,0 +1,27 @@
+<section class="booking-page">
+  <button class="back-link" type="button" (click)="goToTrains()">‹ Back to trains</button>
+
+  <app-booking-stepper current="date" />
+
+  <app-booking-route-bar [schedule]="state.schedule()" />
+
+  <button class="back-link sub" type="button" (click)="goBack()">‹ Back to coaches</button>
+
+  <h1 class="title">Choose Travel Date</h1>
+  <p class="subtitle">{{ coachLabel() }}</p>
+
+  <label class="field-label" for="travelDate">Travel Date</label>
+  <div class="date-field">
+    <input
+      id="travelDate"
+      type="date"
+      [min]="today"
+      [(ngModel)]="date"
+      name="travelDate"
+    />
+  </div>
+
+  <div class="actions">
+    <button class="continue-btn" type="button" [disabled]="!date()" (click)="continue()">Continue to Seats</button>
+  </div>
+</section>

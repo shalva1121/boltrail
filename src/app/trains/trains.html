@@ -1,0 +1,163 @@
+<!-- Hero -->
+<section class="trains-hero">
+  <span class="eyebrow">EXPLORE</span>
+  <h1>Train Routes</h1>
+  <p>Find trains by name, or filter by origin and destination.</p>
+</section>
+
+<div class="page-divider"></div>
+
+<div class="trains-layout">
+
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <div class="sidebar-section">
+      <h3 class="sidebar-title">SEARCH</h3>
+      <label class="sidebar-label">TRAIN NUMBER</label>
+      <input
+        class="sidebar-input"
+        type="text"
+        placeholder="e.g. Express, 42…"
+        [value]="searchQuery()"
+        (input)="searchQuery.set($any($event.target).value); applyFilters()"
+      />
+    </div>
+
+    <div class="sidebar-section">
+      <h3 class="sidebar-title">FILTER BY ROUTE</h3>
+
+      <label class="sidebar-label">FROM</label>
+      <select
+        class="sidebar-input"
+        [value]="filterFrom() ?? ''"
+        (change)="onFromChange($event)"
+      >
+        <option value="">Any origin</option>
+        @for (station of fromStationOptions(); track station.id) {
+          <option [value]="station.id">{{ station.name }}</option>
+        }
+      </select>
+
+      <label class="sidebar-label top-gap">TO</label>
+      <select
+        class="sidebar-input"
+        [value]="filterTo() ?? ''"
+        (change)="onToChange($event)"
+      >
+        <option value="">Any destination</option>
+        @for (station of toStationOptions(); track station.id) {
+          <option [value]="station.id">{{ station.name }}</option>
+        }
+      </select>
+
+      <button class="apply-btn" (click)="applyFilters()">Apply Filter</button>
+      @if (hasActiveFilters) {
+        <button class="clear-btn" (click)="clearFilters()">Clear</button>
+      }
+    </div>
+  </aside>
+
+  <!-- Content -->
+  <main class="trains-main">
+
+    <!-- Loading -->
+    @if (loading()) {
+      <div class="state-box">
+        <div class="spinner"></div>
+        <p>Loading trains…</p>
+      </div>
+    }
+
+    <!-- Error -->
+    @if (!loading() && error()) {
+      <div class="state-box">
+        <span class="state-icon">⚠️</span>
+        <h3>{{ error() }}</h3>
+        <button class="apply-btn retry-btn" (click)="loadTrains()">Retry</button>
+      </div>
+    }
+
+    <!-- Results -->
+    @if (!loading() && !error()) {
+      <p class="results-count">
+        <strong>{{ filtered().length }}</strong> train{{ filtered().length !== 1 ? 's' : '' }} found
+      </p>
+
+      <!-- No results -->
+      @if (filtered().length === 0) {
+        <div class="state-box">
+          <span class="state-icon">🔍</span>
+          <h3>No trains match your filters</h3>
+          <button class="apply-btn retry-btn" (click)="clearFilters()">Clear filters</button>
+        </div>
+      }
+
+      <!-- Train grid -->
+      @if (filtered().length > 0) {
+        <div class="trains-grid">
+          @for (train of filtered(); track train.id ?? train.trainId ?? $index) {
+            <div class="train-card" (click)="openTrainDetails(train)">
+
+              <!-- Image -->
+              <div class="card-image" [class.no-image]="!getImage(train)">
+                @if (getImage(train)) {
+                  <img [src]="getImage(train)!" [alt]="getName(train)" loading="lazy" />
+                } @else {
+                  <span class="placeholder-icon">🚆</span>
+                }
+              </div>
+
+              <!-- Body -->
+              <div class="card-body">
+                <div class="card-meta">
+                  @if (getNumber(train)) {
+                    <span class="train-number">{{ getNumber(train) }}</span>
+                  }
+                  @if (getCoaches(train) != null) {
+                    <span class="coaches-badge">{{ getCoaches(train) }} coaches</span>
+                  }
+                </div>
+
+                <h2 class="train-name">{{ getName(train) }}</h2>
+
+                @if (getFrom(train) || getTo(train)) {
+                  <div class="route-row">
+                    @if (getFrom(train)) {
+                      <span class="station">{{ getFrom(train) }}</span>
+                    }
+                    @if (getFrom(train) && getTo(train)) {
+                      <span class="arrow">→</span>
+                    }
+                    @if (getTo(train)) {
+                      <span class="station">{{ getTo(train) }}</span>
+                    }
+                  </div>
+                }
+
+                <div class="card-footer">
+                  @if (getSeats(train) != null) {
+                    <span class="seats">
+                      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+                        <circle cx="9" cy="7" r="4"/>
+                        <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
+                        <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+                      </svg>
+                      {{ getSeats(train) }} seats
+                    </span>
+                  }
+                  @if (getPrice(train) != null) {
+                    <span class="price">₾{{ getPrice(train) }}</span>
+                  }
+                  <span class="card-arrow">›</span>
+                </div>
+              </div>
+
+            </div>
+          }
+        </div>
+      }
+    }
+
+  </main>
+</div>

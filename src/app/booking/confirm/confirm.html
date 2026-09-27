@@ -1,0 +1,54 @@
+<section class="booking-page">
+  <button class="back-link" type="button" (click)="goToTrains()">‹ Back to trains</button>
+
+  <app-booking-stepper current="confirm" />
+
+  <app-booking-route-bar [schedule]="state.schedule()" />
+
+  @if (success()) {
+    <div class="state-box success">
+      <span class="state-icon">✅</span>
+      <h2>Booking confirmed!</h2>
+      <p>Your seats are reserved. You can find this trip in your profile.</p>
+      <button class="continue-btn" type="button" (click)="goToProfile()">Go to my profile</button>
+    </div>
+  } @else {
+    <button class="back-link sub" type="button" (click)="goBack()">‹ Back to seats</button>
+
+    <h1 class="title">Confirm Booking</h1>
+    <p class="subtitle">Review your trip details before confirming.</p>
+
+    <div class="summary-card">
+      <div class="summary-row">
+        <span>Route</span>
+        <strong>{{ state.schedule()?.origin }} → {{ state.schedule()?.destination }}</strong>
+      </div>
+      <div class="summary-row">
+        <span>Coach</span>
+        <strong>{{ coachLabel() }}</strong>
+      </div>
+      <div class="summary-row">
+        <span>Travel Date</span>
+        <strong>{{ state.travelDate() }}</strong>
+      </div>
+      <div class="summary-row">
+        <span>Seats</span>
+        <strong>{{ seatLabel() }}</strong>
+      </div>
+      <div class="summary-row total">
+        <span>Total</span>
+        <strong>${{ total() }}</strong>
+      </div>
+    </div>
+
+    @if (error()) {
+      <p class="error-msg">{{ error() }}</p>
+    }
+
+    <div class="actions">
+      <button class="continue-btn" type="button" [disabled]="submitting()" (click)="confirmBooking()">
+        {{ submitting() ? 'Confirming…' : 'Confirm Booking' }}
+      </button>
+    </div>
+  }
+</section>

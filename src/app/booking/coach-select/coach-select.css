@@ -1,0 +1,166 @@
+:host {
+  display: block;
+  min-height: calc(100vh - var(--header-height));
+  background: var(--bg);
+  color: var(--text);
+  padding: 40px 56px 64px;
+}
+
+.back-link {
+  border: none;
+  background: transparent;
+  color: var(--accent);
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  padding: 0;
+}
+
+.title {
+  margin: 32px 0 8px;
+  font-size: 38px;
+  font-weight: 800;
+  color: var(--booking-gold);
+}
+
+.subtitle {
+  margin: 0 0 32px;
+  color: var(--muted);
+}
+
+.state-box {
+  display: grid;
+  place-items: center;
+  text-align: center;
+  padding: 80px 24px;
+  gap: 14px;
+}
+
+.state-icon {
+  font-size: 44px;
+}
+
+.spinner {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: 3px solid var(--border);
+  border-top-color: var(--booking-gold);
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.train-track {
+  display: flex;
+  align-items: stretch;
+  overflow-x: auto;
+  scroll-snap-type: x proximity;
+  gap: 0;
+  padding-bottom: 12px;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.train-track::-webkit-scrollbar {
+  display: none;
+}
+
+.wagon {
+  flex-shrink: 0;
+  scroll-snap-align: start;
+}
+
+.wagon-img,
+img.wagon {
+  display: block;
+  height: 180px;
+  width: auto;
+  object-fit: contain;
+  pointer-events: none;
+  user-select: none;
+}
+
+img.wagon.head,
+img.wagon.tail {
+  height: 200px;
+  width: 350px;
+}
+
+button.wagon.coach {
+  position: relative;
+  border: none;
+  background: transparent;
+  padding: 0;
+  cursor: pointer;
+}
+
+button.wagon.coach .wagon-img {
+  width: 350px;
+  height: 180px;
+  border-radius: 0;
+  transition: filter .15s ease;
+}
+
+button.wagon.coach:hover .wagon-img,
+button.wagon.coach:focus-visible .wagon-img {
+  filter: brightness(1.1);
+}
+
+.coach-card {
+  position: absolute;
+  top: 14px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  background: rgba(10, 12, 24, 0.85);
+  border: 1px solid var(--booking-gold);
+  border-radius: 14px;
+  padding: 10px 18px;
+  min-width: 110px;
+}
+
+.coach-class {
+  color: var(--booking-success);
+  font-weight: 800;
+  font-size: 14px;
+}
+
+.coach-seats {
+  color: #cfd2e6;
+  font-size: 12px;
+}
+
+.coach-price {
+  color: var(--booking-gold);
+  font-weight: 900;
+  font-size: 15px;
+}
+
+.swipe-hint {
+  margin: 10px 0 0;
+  text-align: center;
+  color: var(--muted);
+  font-size: 13px;
+}
+
+@media (max-width: 720px) {
+  :host {
+    padding: 24px 16px 40px;
+  }
+
+  .title {
+    font-size: 28px;
+  }
+
+  button.wagon.coach,
+  button.wagon.coach .wagon-img {
+    width: 200px;
+  }
+}

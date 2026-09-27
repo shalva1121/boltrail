@@ -1,0 +1,45 @@
+<section class="booking-page">
+  <button class="back-link" type="button" (click)="goBack()">‹ Back to trains</button>
+
+  <app-booking-stepper current="coach" />
+
+  <app-booking-route-bar [schedule]="state.schedule()" />
+
+  <h1 class="title">Select a Coach</h1>
+  <p class="subtitle">Choose the class of coach you'd like to travel in.</p>
+
+  @if (loading()) {
+    <div class="state-box">
+      <div class="spinner"></div>
+      <p>Loading coaches…</p>
+    </div>
+  } @else if (error()) {
+    <div class="state-box">
+      <span class="state-icon">⚠️</span>
+      <h3>{{ error() }}</h3>
+    </div>
+  } @else if (coaches().length === 0) {
+    <div class="state-box">
+      <span class="state-icon">🧩</span>
+      <h3>No coaches available for this train.</h3>
+    </div>
+  } @else {
+    <div class="train-track" role="list">
+      <img class="wagon head" [src]="headImg" alt="" />
+
+      @for (item of coaches(); track trackByCoach($index, item)) {
+        <button class="wagon coach" type="button" role="listitem" (click)="selectCoach(item)">
+          <img class="wagon-img" [src]="bodyImg" alt="Coach" />
+          <span class="coach-card">
+            <span class="coach-class">{{ coachClass(item) }}</span>
+            <span class="coach-seats">{{ coachSeats(item) }}</span>
+            <span class="coach-price">{{ coachPrice(item) }}</span>
+          </span>
+        </button>
+      }
+
+      <img class="wagon tail" [src]="tailImg" alt="" />
+    </div>
+    <p class="swipe-hint">⟷ Swipe to see all coaches</p>
+  }
+</section>

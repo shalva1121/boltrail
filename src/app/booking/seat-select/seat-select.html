@@ -1,0 +1,65 @@
+<section class="booking-page">
+  <button class="back-link" type="button" (click)="goToTrains()">‹ Back to trains</button>
+
+  <app-booking-stepper current="seats" />
+
+  <app-booking-route-bar [schedule]="state.schedule()" />
+
+  <button class="back-link sub" type="button" (click)="goBack()">‹ Back to date</button>
+
+  <h1 class="title">Select Seats</h1>
+  <p class="subtitle">{{ coachLabel() }}</p>
+
+  @if (loading()) {
+    <div class="state-box">
+      <div class="spinner"></div>
+      <p>Loading seats…</p>
+    </div>
+  } @else if (error()) {
+    <div class="state-box">
+      <span class="state-icon">⚠️</span>
+      <h3>{{ error() }}</h3>
+    </div>
+  } @else if (seats().length === 0) {
+    <div class="state-box">
+      <span class="state-icon">💺</span>
+      <h3>No seats found for this coach.</h3>
+    </div>
+  } @else {
+    <div class="seat-panel">
+      <div class="seat-panel-header">
+        <span>COACH {{ state.coach()?.number ?? state.coach()?.coachNumber }}</span>
+        <span class="count-badge">{{ selectedCount() }}</span>
+      </div>
+
+      <div class="seat-grid">
+        @for (seat of seats(); track trackBySeat($index, seat)) {
+          <button
+            type="button"
+            class="seat"
+            [class.available]="seatState(seat) === 'available'"
+            [class.selected]="seatState(seat) === 'selected'"
+            [class.booked]="seatState(seat) === 'booked'"
+            [disabled]="seatState(seat) === 'booked'"
+            (click)="toggleSeat(seat)"
+          >
+            {{ seat.number }}
+          </button>
+        }
+      </div>
+
+      <div class="legend">
+        <span class="legend-item"><span class="swatch available"></span> Available</span>
+        <span class="legend-item"><span class="swatch selected"></span> Selected</span>
+        <span class="legend-item"><span class="swatch booked"></span> Booked</span>
+      </div>
+    </div>
+
+    <div class="actions">
+      @if (selectedCount() === 0) {
+        <p class="hint">Select at least one seat</p>
+      }
+      <button class="continue-btn" type="button" [disabled]="selectedCount() === 0" (click)="review()">Review Booking</button>
+    </div>
+  }
+</section>

@@ -1,0 +1,92 @@
+:host {
+  display: block;
+}
+
+.stepper {
+  display: flex;
+  align-items: center;
+  max-width: 760px;
+  justify-content: center;
+  margin: 20px auto 30px;
+}
+
+.step {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.dot {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  border: 2px solid var(--border);
+  color: var(--muted);
+  font-weight: 800;
+  font-size: 14px;
+  background: var(--surface);
+  transition: border-color .2s ease, color .2s ease, background .2s ease;
+}
+
+.step.active .dot {
+  border-color: var(--booking-gold);
+  color: var(--booking-gold);
+}
+
+.step.done .dot {
+  border-color: var(--booking-success);
+  color: var(--booking-success);
+}
+
+.label {
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  color: var(--muted);
+  text-transform: uppercase;
+  font-weight: 700;
+}
+
+.step.active .label {
+  color: var(--booking-gold);
+}
+
+.step.done .label {
+  color: var(--booking-success);
+}
+
+.line {
+  flex: 1;
+  height: 2px;
+  min-width: 32px;
+  background: var(--border);
+  margin: 0 8px 22px;
+}
+
+.line.done {
+  background: var(--booking-success);
+}
+
+@media (max-width: 560px) {
+  .stepper {
+    width: 100%;
+  }
+
+  .line {
+    min-width: 16px;
+    margin: 0 4px 22px;
+  }
+
+  .dot {
+    width: 32px;
+    height: 32px;
+    font-size: 12px;
+  }
+
+  .label {
+    font-size: 9px;
+  }
+}

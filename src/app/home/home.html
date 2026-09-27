@@ -1,0 +1,58 @@
+<section class="hero">
+  <div>
+    <h1>Trains that move <span class="hi">fast</span>, booking that moves faster.</h1>
+    <p>Search thousands of routes and lock in your seat in seconds.</p>
+    <div class="search">
+      <div class="field">
+        <span>FROM</span>
+        <input
+          type="text"
+          placeholder="Origin"
+          [value]="fromInput()"
+          (input)="onFromInput($event)"
+        />
+      </div>
+      <div class="field">
+        <span>TO</span>
+        <input
+          type="text"
+          placeholder="Destination"
+          [value]="toInput()"
+          (input)="onToInput($event)"
+        />
+      </div>
+      <button class="btn primary" type="button" (click)="searchTrains()">Search</button>
+    </div>
+  </div>
+  <div class="hero-visual">🚄</div>
+</section>
+
+<section class="features">
+  <div class="feature">
+    <i>🎟️</i>
+    <h3>Multiple classes</h3>
+    <p>First, business, or second on every train.</p>
+  </div>
+  <div class="feature">
+    <i>📅</i>
+    <h3>Flexible dates</h3>
+    <p>Change your date anytime before departure.</p>
+  </div>
+  <div class="feature">
+    <i>🪑</i>
+    <h3>Choose your seat</h3>
+    <p>Pick from a live seat map.</p>
+  </div>
+  <div class="feature">
+    <i>✅</i>
+    <h3>Instant confirmation</h3>
+    <p>Confirmed the moment you book.</p>
+  </div>
+</section>
+
+<section class="cta">
+  <h2>Ready to book your journey?</h2>
+  <p>Browse trains, pick your seat, go.</p>
+  <button class="btn" style="margin-right:10px;">Create account</button>
+  <a href="/trains" class="btn primary">Browse trains</a>
+</section>

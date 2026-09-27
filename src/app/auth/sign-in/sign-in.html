@@ -1,0 +1,163 @@
+<button
+  class="auth-theme-toggle"
+  type="button"
+  [attr.aria-label]="theme.isDark() ? 'Switch to light mode' : 'Switch to dark mode'"
+  (click)="toggleTheme()"
+>
+  @if (theme.isDark()) {
+    <svg xmlns="http://www.w3.org/2000/svg" height="22px" viewBox="0 -960 960 960" width="22px" fill="#7c5cff">
+      <path d="M338.5-338.5Q280-397 280-480t58.5-141.5Q397-680 480-680t141.5 58.5Q680-563 680-480t-58.5 141.5Q563-280 480-280t-141.5-58.5ZM200-440H40v-80h160v80Zm720 0H760v-80h160v80ZM440-760v-160h80v160h-80Zm0 720v-160h80v160h-80ZM256-650l-101-97 57-59 96 100-52 56Zm492 496-97-101 53-55 101 97-57 59Zm-98-550 97-101 59 57-100 96-56-52ZM154-212l101-97 55 53-97 101-59-57Z"/>
+    </svg>
+  } @else {
+    <svg xmlns="http://www.w3.org/2000/svg" height="22px" viewBox="0 -960 960 960" width="22px" fill="#5b3df5">
+      <path d="M480-120q-150 0-255-105T120-480q0-150 105-255t255-105q14 0 27.5 1t26.5 3q-41 29-65.5 75.5T444-660q0 90 63 153t153 63q55 0 101-24.5t75-65.5q2 13 3 26.5t1 27.5q0 150-105 255T480-120Z"/>
+    </svg>
+  }
+</button>
+
+<div class="auth-page">
+
+  <!-- Left brand panel -->
+  <section class="auth-brand">
+    <div class="brand-icon">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <rect x="3" y="7" width="18" height="13" rx="2"/>
+        <path d="M8 7V5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
+        <path d="M3 13h18"/>
+      </svg>
+    </div>
+
+    <h1 class="brand-name">BOLT<span>RAIL</span></h1>
+    <p class="brand-tagline">Book train tickets and manage your trips with your account.</p>
+
+    <div class="brand-stats">
+      <div class="brand-stat">
+        <strong>500+</strong>
+        <span>ROUTES</span>
+      </div>
+      <div class="brand-stat">
+        <strong>50+</strong>
+        <span>STATIONS</span>
+      </div>
+      <div class="brand-stat">
+        <strong>24/7</strong>
+        <span>SUPPORT</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- Right form panel -->
+  <section class="auth-form-panel">
+    <div class="auth-form-card">
+      <div class="form-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/>
+          <polyline points="10 17 15 12 10 7"/>
+          <line x1="15" y1="12" x2="3" y2="12"/>
+        </svg>
+      </div>
+
+      <h2 class="auth-title">{{ isForgotPassword() ? 'Reset Password' : 'Welcome Back' }}</h2>
+      <p class="auth-subtitle">{{ isForgotPassword() ? 'Enter your email and we\'ll send you reset instructions' : 'Sign in to book your next trip' }}</p>
+
+      @if (isForgotPassword()) {
+        <form class="auth-form" (submit)="onForgotPasswordSubmit(); $event.preventDefault()">
+          <div class="form-field">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="2" y="4" width="20" height="16" rx="2"/>
+              <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/>
+            </svg>
+            <input
+              type="email"
+              placeholder="Email address"
+              [value]="forgotEmail()"
+              (input)="forgotEmail.set($any($event.target).value)"
+              autocomplete="email"
+            />
+          </div>
+
+          @if (forgotErrorMessage()) {
+            <p class="auth-error">{{ forgotErrorMessage() }}</p>
+          }
+
+          @if (forgotSuccessMessage()) {
+            <p class="auth-success">{{ forgotSuccessMessage() }}</p>
+          }
+
+          <button class="auth-submit" type="submit" [disabled]="forgotIsLoading()">
+            @if (forgotIsLoading()) {
+              <span class="auth-spinner"></span>
+              Sending...
+            } @else {
+              Send Reset Link
+            }
+          </button>
+
+          <div class="form-options">
+            <a class="forgot-link" href="javascript:void(0)" (click)="cancelForgotPassword()">‹ Back to sign in</a>
+          </div>
+        </form>
+      } @else {
+        <form class="auth-form" (submit)="onSubmit(); $event.preventDefault()">
+          <div class="form-field">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="2" y="4" width="20" height="16" rx="2"/>
+              <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/>
+            </svg>
+            <input
+              type="email"
+              placeholder="Email address"
+              [value]="email()"
+              (input)="email.set($any($event.target).value)"
+              autocomplete="email"
+            />
+          </div>
+
+          <div class="form-field">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="3" y="11" width="18" height="11" rx="2"/>
+              <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+            </svg>
+            <input
+              type="password"
+              placeholder="Password"
+              [value]="password()"
+              (input)="password.set($any($event.target).value)"
+              autocomplete="current-password"
+            />
+          </div>
+
+          <div class="form-options">
+            <label class="remember-me">
+              <input
+                type="checkbox"
+                [checked]="rememberMe()"
+                (change)="rememberMe.set($any($event.target).checked)"
+              />
+              Remember me
+            </label>
+            <a class="forgot-link" href="javascript:void(0)" (click)="showForgotPassword()">Forgot password?</a>
+          </div>
+
+          @if (errorMessage()) {
+            <p class="auth-error">{{ errorMessage() }}</p>
+          }
+
+          <button class="auth-submit" type="submit" [disabled]="isLoading()">
+            @if (isLoading()) {
+              <span class="auth-spinner"></span>
+              Signing In...
+            } @else {
+              Sign In
+            }
+          </button>
+        </form>
+      }
+
+      <div class="auth-divider">or</div>
+
+      <p class="auth-switch">Don't have an account? <a routerLink="/register">Create one now</a></p>
+    </div>
+  </section>
+
+</div>

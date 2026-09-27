@@ -1,0 +1,370 @@
+:host {
+  display: block;
+  background: var(--bg);
+  color: var(--text);
+  font-family: Arial, Helvetica, sans-serif;
+  min-height: calc(100vh - var(--header-height));
+}
+
+/* ── Hero ── */
+.trains-hero {
+  padding: 56px 56px 40px;
+}
+
+.eyebrow {
+  display: block;
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  color: var(--accent);
+  margin-bottom: 10px;
+}
+
+.trains-hero h1 {
+  font-size: 48px;
+  font-weight: 900;
+  margin: 0 0 12px;
+  line-height: 1.05;
+}
+
+.trains-hero p {
+  color: var(--muted);
+  font-size: 15px;
+  margin: 0;
+}
+
+.page-divider {
+  height: 1px;
+  background: var(--border);
+  margin: 0 56px;
+}
+
+/* ── Layout ── */
+.trains-layout {
+  display: flex;
+  gap: 32px;
+  padding: 36px 56px 60px;
+  align-items: flex-start;
+}
+
+/* ── Sidebar ── */
+.sidebar {
+  width: 260px;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.sidebar-section {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 24px 20px;
+  display: flex;
+  flex-direction: column;
+}
+
+.sidebar-title {
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  color: var(--accent);
+  margin: 0 0 18px;
+}
+
+.sidebar-label {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: var(--muted);
+  margin-bottom: 8px;
+}
+
+.sidebar-label.top-gap {
+  margin-top: 16px;
+}
+
+.sidebar-input {
+  width: 100%;
+  height: 42px;
+  padding: 0 14px;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  background: var(--bg);
+  color: var(--text);
+  font-size: 13px;
+  font-family: inherit;
+  outline: none;
+  transition: border-color 0.15s;
+  box-sizing: border-box;
+  appearance: auto;
+}
+
+.sidebar-input:focus {
+  border-color: var(--accent);
+}
+
+.apply-btn {
+  margin-top: 16px;
+  width: 100%;
+  height: 44px;
+  border-radius: 10px;
+  border: none;
+  background: var(--accent);
+  color: var(--accent-text);
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  font-family: inherit;
+  transition: opacity 0.15s;
+}
+
+.apply-btn:hover {
+  opacity: 0.88;
+}
+
+.clear-btn {
+  margin-top: 8px;
+  width: 100%;
+  height: 36px;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  background: transparent;
+  color: var(--muted);
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  font-family: inherit;
+  transition: color 0.15s, border-color 0.15s;
+}
+
+.clear-btn:hover {
+  color: var(--text);
+  border-color: var(--text);
+}
+
+/* ── Main ── */
+.trains-main {
+  flex: 1;
+  min-width: 0;
+}
+
+.results-count {
+  font-size: 14px;
+  color: var(--muted);
+  margin: 0 0 20px;
+}
+
+.results-count strong {
+  color: var(--text);
+}
+
+/* ── State boxes ── */
+.state-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 80px 20px;
+  text-align: center;
+  gap: 12px;
+  color: var(--muted);
+}
+
+.state-icon {
+  font-size: 44px;
+}
+
+.state-box h3 {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--text);
+  margin: 0;
+}
+
+.retry-btn {
+  margin-top: 8px;
+  width: auto;
+  padding: 0 28px;
+}
+
+.spinner {
+  width: 40px;
+  height: 40px;
+  border: 4px solid var(--border);
+  border-top-color: var(--accent);
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+}
+
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* ── Train grid ── */
+.trains-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 18px;
+}
+
+/* ── Train card ── */
+.train-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  cursor: pointer;
+  transition: border-color 0.2s, transform 0.2s, box-shadow 0.2s;
+}
+
+.train-card:hover {
+  border-color: var(--accent);
+  transform: translateY(-3px);
+  box-shadow: 0 12px 32px rgba(0,0,0,0.15);
+}
+
+/* Card image */
+.card-image {
+  width: 100%;
+  aspect-ratio: 16/9;
+  overflow: hidden;
+  background: var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.card-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.3s;
+}
+
+.train-card:hover .card-image img {
+  transform: scale(1.04);
+}
+
+.card-image.no-image {
+  background: var(--border);
+  aspect-ratio: 16/9;
+}
+
+.placeholder-icon {
+  font-size: 40px;
+  opacity: 0.4;
+}
+
+/* Card body */
+.card-body {
+  padding: 14px 16px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  flex: 1;
+}
+
+.card-meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.train-number {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--muted);
+}
+
+.coaches-badge {
+  font-size: 11px;
+  font-weight: 700;
+  padding: 3px 10px;
+  border-radius: 20px;
+  background: var(--accent);
+  color: var(--accent-text);
+  white-space: nowrap;
+}
+
+.train-name {
+  font-size: 18px;
+  font-weight: 900;
+  margin: 0;
+  line-height: 1.2;
+}
+
+.route-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  color: var(--muted);
+}
+
+.arrow {
+  color: var(--accent);
+  font-size: 12px;
+}
+
+.card-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 4px;
+  padding-top: 10px;
+  border-top: 1px solid var(--border);
+}
+
+.seats {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 12px;
+  color: var(--muted);
+}
+
+.seats svg {
+  flex-shrink: 0;
+}
+
+.card-arrow {
+  font-size: 18px;
+  color: var(--muted);
+  line-height: 1;
+  transition: color 0.15s, transform 0.15s;
+}
+
+.train-card:hover .card-arrow {
+  color: var(--accent);
+  transform: translateX(3px);
+}
+
+/* ── Responsive ── */
+@media (max-width: 1100px) {
+  .trains-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 900px) {
+  .trains-hero { padding: 36px 28px 28px; }
+  .trains-hero h1 { font-size: 36px; }
+  .page-divider { margin: 0 28px; }
+  .trains-layout { padding: 24px 28px 40px; flex-direction: column; }
+  .sidebar { width: 100%; flex-direction: row; flex-wrap: wrap; }
+  .sidebar-section { flex: 1; min-width: 240px; }
+}
+
+@media (max-width: 600px) {
+  .trains-hero { padding: 28px 20px 20px; }
+  .trains-hero h1 { font-size: 28px; }
+  .page-divider { margin: 0 20px; }
+  .trains-layout { padding: 20px 20px 40px; gap: 20px; }
+  .sidebar { flex-direction: column; }
+  .sidebar-section { min-width: unset; }
+  .trains-grid { grid-template-columns: 1fr; }
+}

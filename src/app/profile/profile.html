@@ -1,0 +1,227 @@
+<div class="profile-page">
+  <section class="profile-aside">
+    <div class="profile-card">
+      <div class="profile-avatar">{{ firstName().charAt(0) || 'U' }}{{ lastName().charAt(0) || '' }}</div>
+      <div class="profile-info">
+        <p class="profile-role">User</p>
+        <h1 class="profile-name">{{ firstName() || 'Your' }} {{ lastName() || 'Name' }}</h1>
+        <p class="profile-email">{{ email() || 'No email available' }}</p>
+      </div>
+      <nav class="profile-nav">
+        <button class="profile-nav-item" type="button" [class.active]="activeTab() === 'profile'" (click)="openTab('profile')">My Profile</button>
+        <button class="profile-nav-item" type="button" [class.active]="activeTab() === 'bookings'" (click)="openTab('bookings')">My Bookings</button>
+        <button class="profile-nav-item" type="button" [class.active]="activeTab() === 'settings'" (click)="openTab('settings')">Settings</button>
+      </nav>
+      <button class="profile-signout" type="button" (click)="signOut()">Sign Out</button>
+    </div>
+  </section>
+
+  <section class="profile-main">
+    <div class="profile-header">
+      <div>
+        <p class="profile-title">
+          @if (activeTab() === 'profile') {
+            Personal Information
+          } @else if (activeTab() === 'bookings') {
+            My Bookings
+          } @else {
+            Security Settings
+          }
+        </p>
+        <p class="profile-description">
+          @if (activeTab() === 'profile') {
+            Update your name, contact details and date of birth.
+          } @else if (activeTab() === 'bookings') {
+            Review your recent train bookings and check seat details.
+          } @else {
+            Manage your password and delete your account.
+          }
+        </p>
+      </div>
+    </div>
+
+    <div class="profile-form-card">
+      @if (activeTab() === 'profile') {
+        @if (errorMessage()) {
+          <p class="profile-error">{{ errorMessage() }}</p>
+        }
+        @if (successMessage()) {
+          <p class="profile-success">{{ successMessage() }}</p>
+        }
+
+        <div class="profile-field">
+          <label>Picture URL</label>
+          <input type="url" placeholder="https://" [value]="pictureUrl()" (input)="pictureUrl.set($any($event.target).value)" />
+        </div>
+
+        <div class="profile-grid">
+          <div class="profile-field">
+            <label>First Name</label>
+            <input type="text" [value]="firstName()" (input)="firstName.set($any($event.target).value)" />
+          </div>
+          <div class="profile-field">
+            <label>Last Name</label>
+            <input type="text" [value]="lastName()" (input)="lastName.set($any($event.target).value)" />
+          </div>
+        </div>
+
+        <div class="profile-field">
+          <label>Email Address</label>
+          <input type="email" [value]="email()" (input)="email.set($any($event.target).value)" />
+        </div>
+
+        <div class="profile-field">
+          <label>Phone Number</label>
+          <input type="tel" placeholder="e.g. +1 555 0100" [value]="phone()" (input)="phone.set($any($event.target).value)" />
+        </div>
+
+        <div class="profile-field">
+          <label>Address</label>
+          <input type="text" placeholder="Your address" [value]="address()" (input)="address.set($any($event.target).value)" />
+        </div>
+
+        <div class="profile-field">
+          <label>Date of Birth</label>
+          <input type="date" [value]="dateOfBirth()" (input)="dateOfBirth.set($any($event.target).value)" />
+        </div>
+
+        <button class="profile-save" type="button" (click)="saveChanges()" [disabled]="isLoading()">
+          @if (isLoading()) {
+            Saving...
+          } @else {
+            Save Changes
+          }
+        </button>
+      } @else if (activeTab() === 'bookings') {
+        <div class="bookings-filter-bar">
+          <div class="profile-field">
+            <label>From Date</label>
+            <input type="date" [value]="filterFrom()" (input)="filterFrom.set($any($event.target).value)" />
+          </div>
+          <div class="profile-field">
+            <label>To Date</label>
+            <input type="date" [value]="filterTo()" (input)="filterTo.set($any($event.target).value)" />
+          </div>
+          <div class="bookings-filter-actions">
+            <button class="booking-filter-btn" type="button" (click)="applyFilter()">Filter</button>
+            <button class="booking-clear-btn" type="button" (click)="clearFilter()">Clear</button>
+          </div>
+        </div>
+
+        @if (bookingsLoading()) {
+          <p class="profile-info-text">Loading your bookings…</p>
+        } @else if (bookingsError()) {
+          <p class="profile-error">{{ bookingsError() }}</p>
+        } @else if (bookings().length === 0) {
+          <p class="profile-info-text">No bookings found yet. Your confirmed bookings will appear here.</p>
+        } @else {
+          <div class="bookings-list">
+            @for (booking of bookings(); track booking.id || booking.bookingId) {
+              <article class="booking-card">
+                <div class="booking-card-main">
+                  <div class="booking-card-route">
+                    <p class="booking-route-line">
+                      {{ booking.schedule?.origin || booking.origin || 'Unknown' }}
+                      <span>→</span>
+                      {{ booking.schedule?.destination || booking.destination || 'Unknown' }}
+                    </p>
+                    <p class="booking-route-meta">
+                      {{ booking.train?.name || booking.trainName || booking.schedule?.trainName || 'Train' }}
+                      ·
+                      {{ booking.schedule?.departureTime || booking.departureTime || 'Time not set' }}
+                      ·
+                      {{ booking.travelDate || booking.schedule?.departureDate || 'Date not set' }}
+                    </p>
+                  </div>
+
+                  <div class="booking-card-meta">
+                    <span class="booking-badge">{{ booking.coach?.class || booking.coachClass || booking.class || 'Standard' }}</span>
+                    <span class="booking-seat-info">
+                      Seat <strong>{{ booking.seatNumber || booking.seat?.number || booking.seatId || 'N/A' }}</strong>
+                      Coach <strong>{{ booking.coach?.number || booking.coachNumber || booking.coach || 'N/A' }}</strong>
+                    </span>
+                    <span class="booking-price">${{ booking.price || booking.totalPrice || booking.amount || '0' }}</span>
+                  </div>
+
+                  <div class="booking-card-actions">
+                    <button class="booking-detail-btn" type="button" (click)="viewDetails(booking.id || booking.bookingId)">Details</button>
+                    <button class="booking-delete-btn" type="button" (click)="deleteBooking(booking.id || booking.bookingId)" [disabled]="deletingBookingId() === (booking.id || booking.bookingId)">
+                      @if (deletingBookingId() === (booking.id || booking.bookingId)) { Deleting... } @else { Delete }
+                    </button>
+                  </div>
+                </div>
+              </article>
+            }
+          </div>
+
+          <div class="bookings-actions">
+            <button class="profile-cancel" type="button" (click)="loadBookings(bookingsPage() - 1)" [disabled]="bookingsPage() <= 1">Previous</button>
+            <button class="profile-save" type="button" (click)="loadBookings(bookingsPage() + 1)">Next</button>
+          </div>
+        }
+      } @else {
+        @if (passwordErrorMessage()) {
+          <p class="profile-error">{{ passwordErrorMessage() }}</p>
+        }
+        @if (passwordSuccessMessage()) {
+          <p class="profile-success">{{ passwordSuccessMessage() }}</p>
+        }
+
+        <div class="profile-field">
+          <label>Current Password</label>
+          <input type="password" [value]="currentPassword()" (input)="currentPassword.set($any($event.target).value)" />
+        </div>
+
+        <div class="profile-field">
+          <label>New Password</label>
+          <input type="password" [value]="newPassword()" (input)="newPassword.set($any($event.target).value)" />
+        </div>
+
+        <button class="profile-save" type="button" (click)="changePassword()" [disabled]="passwordLoading()">
+          @if (passwordLoading()) {
+            Updating Password...
+          } @else {
+            Update Password
+          }
+        </button>
+
+        <div class="profile-divider"></div>
+
+        @if (deleteErrorMessage()) {
+          <p class="profile-error">{{ deleteErrorMessage() }}</p>
+        }
+
+        <div class="profile-danger-card">
+          <p class="profile-danger-title">Danger Zone</p>
+          <p class="profile-danger-text">Deleting your account will permanently remove all data. This cannot be undone.</p>
+          <button class="profile-delete" type="button" (click)="openDeleteConfirmation()" [disabled]="deleteLoading()">
+            @if (deleteLoading()) {
+              Deleting...
+            } @else {
+              Delete Account
+            }
+          </button>
+        </div>
+
+        @if (confirmDelete()) {
+          <div class="profile-dialog-backdrop">
+            <div class="profile-dialog">
+              <p class="profile-dialog-title">Confirm Account Deletion</p>
+              <p class="profile-dialog-body">Are you sure you want to delete your account? This action is permanent.</p>
+              <div class="profile-dialog-actions">
+                <button class="profile-cancel" type="button" (click)="cancelDelete()">Cancel</button>
+                <button class="profile-delete" type="button" (click)="deleteAccount()" [disabled]="deleteLoading()">
+                  @if (deleteLoading()) {
+                    Deleting...
+                  } @else {
+                    Confirm Delete
+                  }
+                </button>
+              </div>
+            </div>
+          </div>
+        }
+      }
+    </div>
+  </section>
+</div>

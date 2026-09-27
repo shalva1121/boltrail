@@ -1,0 +1,41 @@
+:root {
+  --bg: #f5f4ff;
+  --surface: #ffffff;
+  --text: #13111f;
+  --muted: #5a5670;
+  --border: #dcd9f5;
+  --accent: #5b3df5;
+  --accent-text: #ffffff;
+  --header-height: 78px;
+}
+
+:root {
+  --booking-gold: var(--accent);
+  --booking-gold-text: #ffffff;
+  --booking-success: #4faf84;
+}
+
+html[data-theme="dark"] {
+  --bg: #0e0c1a;
+  --surface: #181628;
+  --text: #f1efff;
+  --muted: #9b96bd;
+  --border: #2a2645;
+  --accent: #7c5cff;
+  --accent-text: #0e0c1a;
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  padding: 0;
+  background: var(--bg);
+  color: var(--text);
+}
+
+body {
+  font-family: Arial, Helvetica, sans-serif;
+  transition: background .2s ease, color .2s ease;
+  padding-top: var(--header-height);
+}
